@@ -51,24 +51,24 @@ def basis_expansion(X, K, TYPE, NODE):
     Expansion = np.zeros((K+1, M, N))
 
     if TYPE == 'polynomial':
-        for n in xrange(N):
-            for k in xrange(K):
+        for n in range(N):
+            for k in range(K):
                 Expansion[k,:,n] = X[n,:]**k
 
     elif TYPE == 'polynomial_diff':
         Xi =np.zeros((N,M))
-        for m in xrange(M):
+        for m in range(M):
             Xi[:,m] = X[:,m]-X[NODE,m]
 
-        for n in xrange(N):
-            for k in xrange(K):
+        for n in range(N):
+            for k in range(K):
                 Expansion[k,:,n] = Xi[n,:]**k
 
     elif TYPE == 'fourier':
         Expansion=np.zeros((2*(K), M,N))
-        for n in xrange(N):
+        for n in range(N):
             t = 0
-            for k in xrange(K):
+            for k in range(K):
                 Expansion[k+t,:,n] = np.sin(k*X[n,:])
                 Expansion[k+t+1,:,n] = np.cos(k*X[n,:])
                 t += 1
@@ -76,30 +76,30 @@ def basis_expansion(X, K, TYPE, NODE):
     elif TYPE == 'fourier_diff':
         Expansion=np.zeros((2*(K),M,N))
         Xi = np.zeros((N,M))
-        for m in xrange(M):
+        for m in range(M):
             Xi[:,m] = X[:,m] - X[NODE, m]
 
-        for n in xrange(N):
+        for n in range(N):
             t = 0
-            for k in xrange(K):
+            for k in range(K):
                 Expansion[k+t,:,n] = np.sin(k*Xi[n,:])
                 Expansion[k+t+1,:,n] = np.cos(k*Xi[n,:])
                 t += 1
 
     elif TYPE == 'power_series':
         Expansion = np.zeros(((K)*(K), M, N))
-        for n in xrange(N):
-            for k1 in xrange(K):
-                for k2 in xrange(K):
-                    for m in xrange(M):
+        for n in range(N):
+            for k1 in range(K):
+                for k2 in range(K):
+                    for m in range(M):
                         Expansion[((K)*k1)+k2, m, n] = (X[NODE,m]**k1)*(X[n,m]**k2)
 
     elif TYPE == 'RBF':
         Expansion = np.zeros((K,M,N))
-        for n in xrange(N):
+        for n in range(N):
             A = np.vstack((X[n,:], X[NODE,:]))
-            for m1 in xrange(K):
-                for m2 in xrange(M):
+            for m1 in range(K):
+                for m2 in range(M):
                     Expansion[m1,m2, n] = np.sqrt(2.0+np.linalg.norm(A[:,m1]-A[:,m2],2)**2)
 
     return(Expansion)

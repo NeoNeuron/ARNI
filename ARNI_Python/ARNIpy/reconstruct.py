@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.metrics import roc_curve, auc
 import sys
 
-from basis_expansion import basis_expansion
+from .basis_expansion import basis_expansion
 
 def reconstruct(MODEL, NODE, BASIS, ORDER):
     '''
@@ -81,7 +81,7 @@ def reconstruct(MODEL, NODE, BASIS, ORDER):
         print('Estimating time derivatives and constructing input matrices...')
         Xtemp = np.array([])
         DX = np.array([])
-        for s in xrange(S):
+        for s in range(S):
             m_start = M*s
             m_end = M*s + (M-1)
             x0 = x[:,m_start:m_end]
@@ -101,8 +101,8 @@ def reconstruct(MODEL, NODE, BASIS, ORDER):
 
             # for each node, x1 regulated by x2 & x3. Modify adjacency matrix
             # for comparison to predictions
-            for i in xrange(Ns):
-                for j in xrange(Ns):
+            for i in range(Ns):
+                for j in range(Ns):
                     connectivity2[i,(3*j)+0] = connectivity[i,j]
                     if i == j:
                         connectivity2[i,(3*j)+1] = 1
@@ -113,7 +113,7 @@ def reconstruct(MODEL, NODE, BASIS, ORDER):
             #beginning of reconstruction algorithm
             print('Performing ARNI...')
             Y = basis_expansion(X, ORDER, BASIS, NODE)
-            nolist = range(N)
+            nolist = list(range(N))
             llist = []
             cost = []
             b = 1
@@ -121,13 +121,13 @@ def reconstruct(MODEL, NODE, BASIS, ORDER):
             while (nolist and (b==1)):
                 #composition of inferred subspaces
                 Z = np.array([])
-                for n in xrange(len(llist)):
+                for n in range(len(llist)):
                     Z = np.vstack((Z, Y[:,:,llist[n]])) if Z.size else Y[:,:,llist[n]]
 
                 # Projection on remaining composite subspaces
                 P = np.zeros((len(nolist), 2))
                 cost_err = np.zeros(len(nolist),)
-                for n in xrange(len(nolist)):
+                for n in range(len(nolist)):
                     #composition of a possible space
                     R = np.vstack((Z, Y[:,:,nolist[n]])) if Z.size else Y[:,:,nolist[n]]
                     #Error of projection on possible composite space
@@ -177,7 +177,7 @@ def reconstruct(MODEL, NODE, BASIS, ORDER):
                     TPR = [np.nan]
                 else:
                     # Evaluation of results via AUC score
-                    FPR, TPR, _ = roc_curve(np.abs(adjacency[NODE,:]), np.abs(vec), 1)
+                    FPR, TPR, _ = roc_curve(np.abs(adjacency[NODE,:]), np.abs(vec), pos_label=1)
                     AUC = auc(FPR, TPR)
 
                     FPR = np.insert(FPR,0,0.)
@@ -198,7 +198,7 @@ def reconstruct(MODEL, NODE, BASIS, ORDER):
             print('Performing ARNI...')
             # Y[basis, sample, node]
             Y = basis_expansion(X, ORDER, BASIS, NODE)
-            nolist = range(N)
+            nolist = list(range(N))
             llist = []
             cost = []
             b=1
@@ -206,13 +206,13 @@ def reconstruct(MODEL, NODE, BASIS, ORDER):
             while (nolist and (b==1)):
                 #composition of inferred subspaces
                 Z = np.array([])
-                for n in xrange(len(llist)):
+                for n in range(len(llist)):
                     Z = np.vstack((Z,Y[:,:,llist[n]])) if Z.size else Y[:,:,llist[n]]
 
                 # projection on remaining composite spaces
                 P = np.zeros((len(nolist),2))
                 cost_err = np.zeros(len(nolist),)
-                for n in xrange(len(nolist)):
+                for n in range(len(nolist)):
                     #composition of a possible spaces
                     R = np.vstack((Z, Y[:,:,nolist[n]])) if Z.size else Y[:,:,nolist[n]]
                     #error of projection on possible composite space
@@ -255,7 +255,7 @@ def reconstruct(MODEL, NODE, BASIS, ORDER):
 
                 #adding degradation rate to true adjecency matric of Michaelis-menten systems
                 if MODEL == 'michaelis_menten':
-                    for i in xrange(N):
+                    for i in range(N):
                         adjacency[i,i] = 1
 
                 print('Quality of reconstruction:')
@@ -267,8 +267,7 @@ def reconstruct(MODEL, NODE, BASIS, ORDER):
                     TPR = [np.nan]
                 else:
                     # Evaluation of results via AUC score
-                    FPR, TPR, _ = roc_curve(np.abs(adjacency[NODE,:]),
-                    np.abs(vec), 1)
+                    FPR, TPR, _ = roc_curve(np.abs(adjacency[NODE,:]), np.abs(vec), pos_label=1)
                     AUC = auc(FPR, TPR)
                     FPR = np.insert(FPR,0,0.)
                     TPR = np.insert(TPR,0,0.)

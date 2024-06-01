@@ -12,9 +12,9 @@ def kuramoto1(y,t):
 
     J = np.loadtxt('Data/connectivity.dat')
 
-    for i in xrange(k):
+    for i in range(k):
         sum = 0.0
-        for j in xrange(k):
+        for j in range(k):
             sum += J[i,j] * np.sin(y[j] - y[i])
 
         dydt[i] = w[i] + sum
@@ -30,9 +30,9 @@ def kuramoto2(y,t):
 
     J = np.loadtxt('Data/connectivity.dat')
 
-    for i in xrange(k):
+    for i in range(k):
         sum=0.0
-        for j in xrange(k):
+        for j in range(k):
             sum += J[i,j]*(np.sin(y[j]-y[i]-1.05)) + 0.33*np.sin(2*(y[i]-y[j]))
         dydt[i] = w[i] + sum
 
@@ -45,9 +45,9 @@ def michaelis_menten(y,t):
 
     k = J.shape[0]
 
-    for i in xrange(k):
+    for i in range(k):
         sum=0.0
-        for j in xrange(k):
+        for j in range(k):
             sum += (J[i,j] * (y[j]/(1+y[j])))
         dydt[i] = -y[i] + sum
 
@@ -59,9 +59,9 @@ def roessler(y,t):
     J = np.loadtxt('Data/connectivity.dat')
     N = J.shape[0]
 
-    for i in xrange(N):
+    for i in range(N):
         sum = 0.0
-        for j in xrange(N):
+        for j in range(N):
             sum += J[i,j]*np.sin(y[(3*j)+0])
 
         dydt[(3*i)+0] = -y[(3*i)+1] - y[(3*i)+2] + sum

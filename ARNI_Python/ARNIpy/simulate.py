@@ -4,8 +4,8 @@ from scipy.integrate import odeint
 import subprocess
 import sys
 
-from models import kuramoto1,kuramoto2, michaelis_menten, roessler
-from topology import topology
+from .models import kuramoto1,kuramoto2, michaelis_menten, roessler
+from .topology import topology
 
 def simulate(MODEL, N, NI, S, M):
     '''
@@ -73,7 +73,7 @@ def simulate(MODEL, N, NI, S, M):
         if MODEL == 'kuramoto1':
             w = -2 + 4*np.random.uniform(low=0., high=1., size=(N,))
             np.savetxt('Data/frequencies.dat', w, fmt='%.4f',delimiter='\t')
-            for s in xrange(S):
+            for s in range(S):
                 init = -3.14 + (3.14+3.14) * np.random.uniform(0.,1.,size=(N,))
                 tspan = np.arange(0,M,resolution)
                 y = odeint(kuramoto1, init, tspan)
@@ -82,21 +82,21 @@ def simulate(MODEL, N, NI, S, M):
         elif MODEL == 'kuramoto2':
             w = -2 + (4) * np.random.uniform(0.,1.,size=(N,))
             np.savetxt('Data/frequencies.dat',w, fmt='%.4f', delimiter='\t')
-            for s in xrange(S):
+            for s in range(S):
                 init = -3.14 + (3.14+3.14)*np.random.uniform(0.,1.,size=(N,))
                 tspan=np.arange(0,M,resolution)
                 y = odeint(kuramoto2, init, tspan)
                 Y = np.vstack((Y,y)) if Y.size else y
 
         elif MODEL == 'michaelis_menten':
-            for s in xrange(S):
+            for s in range(S):
                 init = 1+np.random.uniform(0.,1.,size=(N,))
                 tspan=np.arange(0,M,resolution)
                 y = odeint(michaelis_menten, init, tspan)
                 Y = np.vstack((Y,y)) if Y.size else y
 
         elif MODEL == 'roessler':
-            for s in xrange(S):
+            for s in range(S):
                 init=-5 + (5+5)*np.random.uniform(0.,1., size=(3*N,))
                 tspan = np.arange(0,M,resolution)
                 y = odeint(roessler, init, tspan)

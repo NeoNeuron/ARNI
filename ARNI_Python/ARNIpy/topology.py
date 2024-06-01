@@ -47,10 +47,10 @@ def topology(N,TYPE, DIRECTED, NI):
             J = np.zeros((N,N)) # coupling matrices
 
             if TYPE == 'homogeneous': #homogeneous topology with NI connection per unit
-                for i in xrange(N):
+                for i in range(N):
                     f = np.random.permutation(range(N))
                     f = [x for x in f if x != i]
-                    for j in xrange(NI):
+                    for j in range(NI):
                         J[i,f[j]]=(0.5+(1-0.5)*np.random.uniform(0,1))/NI
 
             elif TYPE == 'regular': #regular structure with NI connections per unit
@@ -58,10 +58,10 @@ def topology(N,TYPE, DIRECTED, NI):
                 f = np.random.permutation(range(1,N))
 
                 a = [0]*N
-                for i in xrange(NI):
+                for i in range(NI):
                     a[f[i]] = 1
 
-                for n in xrange(N):
+                for n in range(N):
                     J[n,:] = a
                     b = a[-1]
                     a = a[:-1]
@@ -74,8 +74,8 @@ def topology(N,TYPE, DIRECTED, NI):
                 np.savetxt('Data/connectivity.dat', J, fmt='%.4f', delimiter='\t')
 
             elif DIRECTED == 'undirected':
-                for i in xrange(N):
-                    for j in xrange(N):
+                for i in range(N):
+                    for j in range(N):
                         if (J[i,j]!=0 and J[j,i] == 0):
                             J[j,i]=J[i,j]
 
